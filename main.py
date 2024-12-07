@@ -12,22 +12,32 @@ def get_character_frequency(text: str):
     
     return char_frequency
 
+def convert_to_list(dict):
+    converted_list = []
+    for k in dict:
+        converted_list.append({"char": k, "frequency": dict[k]})
+    return converted_list
+
 def print_report(file_path: str, word_count: str, char_count: dict):
     print(f"--- Begin report of {file_path} ---")
     print(f"{word_count} words found in the document")
     print("")
-    alpha_chars = "abcdefghijklmnopqrstuvwxyz"
     
-    for k in char_count:
-        if k in alpha_chars:
-            frequency = char_count[k]
-            print(f"The '{k}' chracter was found {frequency} times")
+    char_count_list = convert_to_list(char_count)
+    char_count_list.sort(reverse=True, key=sort_on)
+
+    for i in char_count_list:
+        if i["char"].isalpha():
+            print(f"The '{i['char']}' character was found {i['frequency']} times")
 
 def get_file_contents(file_path: str) -> str:
     with open(file_path) as f:
         file_contents = f.read()
     
     return file_contents
+
+def sort_on(dict):
+    return dict["frequency"]
 
 def main():
     file_path = "books/frankenstein.txt"
